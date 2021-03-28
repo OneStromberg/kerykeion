@@ -161,8 +161,8 @@ class MakeSvgInstance:
 
         
         #screen size       
-        self.screen_width = 1200
-        self.screen_height = 800
+        self.screen_width = 1104
+        self.screen_height = 700
 
 
 
@@ -171,8 +171,6 @@ class MakeSvgInstance:
         self.home_geolat      = self.user.city_lat
         self.home_geolon      = self.user.city_long
         self.home_timezonestr = self.user.city_tz
-
-        print(f'{self.user.name} birth location: {self.home_location}, {self.home_geolat}, {self.home_geolon}')
             
         #default location
         self.location    = self.home_location
@@ -622,14 +620,16 @@ class MakeSvgInstance:
         if self.type == "Transit" or self.type == "Composite":
             dropin=54
         else:
-            dropin=18+self.c1
-        sign = '<g transform="translate(-16,-16)"><use x="' + str(dropin + self.sliceToX(num,r-dropin,offset)) + '" y="' + str(dropin + self.sliceToY(num,r-dropin,offset)) + '" xlink:href="#' + type + '" /></g>\n'
+            dropin=68+self.c1
+
+        radius_multiplier = 2.6
+        sign = '<g transform="translate(-16,-16)"><use transform="scale(0.4)" x="' + str(dropin + self.sliceToX(num,r * radius_multiplier  -dropin,offset)) + '" y="' + str(dropin + self.sliceToY(num,r * radius_multiplier - dropin,offset)) + '" xlink:href="#' + type + '" /></g>\n'
         return slice + '\n' + sign
     
     def makeZodiac( self , r ):
         output = ""
         for i in range(len(self.zodiac)):
-            output = output + self.zodiacSlice( i , r , "fill:" + self.colors["zodiac_bg_%s"%(i)] + "; fill-opacity: 0.5;" , self.zodiac[i]) + '\n'
+            output = output + self.zodiacSlice( i , r , "fill:" + self.colors["zodiac_bg_%s"%(i)] + "; fill-opacity: 1;" , self.zodiac[i]) + '\n'
         return output
         
     def makeHouses( self , r ):
