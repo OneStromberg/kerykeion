@@ -4,8 +4,6 @@
 
 #basics
 #import settings as chart_settings
-import kerykeion.utilities.kr_settings as chart_settings
-
 import math, os.path, datetime, json, pytz
 import kerykeion as kr
 
@@ -15,7 +13,13 @@ from string import Template
 #minidom parser
 from xml.dom.minidom import parseString
 
-
+class MakeSvgConfig:
+    def __init__(self, label, colors, planets, aspects):
+        self.label = label
+        self.colors = colors
+        self.planets = planets
+        self.aspects = aspects
+        pass
 
 
 #calculation and svg drawing class
@@ -29,7 +33,7 @@ class MakeSvgInstance:
 
     """
 
-    def __init__(self, first_obj, chart_type="Natal", second_obj=None):
+    def __init__(self, chart_settings, first_obj, chart_type="Natal", second_obj=None):
 
         # Directories:
         DATADIR               = os.path.dirname(__file__)
@@ -43,7 +47,7 @@ class MakeSvgInstance:
 
         # Settings file
 
-        self.label       = chart_settings.english
+        self.label       = chart_settings.label
         self.colors      = chart_settings.colors
         self.planets_asp = chart_settings.planets
         self.aspects     = chart_settings.aspects
@@ -166,7 +170,6 @@ class MakeSvgInstance:
         self.home_location    = self.user.city
         self.home_geolat      = self.user.city_lat
         self.home_geolon      = self.user.city_long
-        self.home_countrycode =  self.user.country_code
         self.home_timezonestr = self.user.city_tz
 
         print(f'{self.user.name} birth location: {self.home_location}, {self.home_geolat}, {self.home_geolon}')
@@ -175,7 +178,6 @@ class MakeSvgInstance:
         self.location    = self.home_location
         self.geolat      = float(self.home_geolat)
         self.geolon      = float(self.home_geolon)
-        self.countrycode = self.home_countrycode
         self.timezonestr = self.home_timezonestr
         
         #current datetime
@@ -353,7 +355,7 @@ class MakeSvgInstance:
 
         td['bottomLeft1']= ''
         td['bottomLeft2']= ''
-        td['bottomLeft3'] = '%s: %s' % ( ("Lunar Phase"),self.dec2deg(self.lunar_phase['degrees_between_s_m']))
+        td['bottomLeft3'] = '%s: %s' % ( (self.label["lunar_phase"]),self.dec2deg(self.lunar_phase['degrees_between_s_m']))
         td['bottomLeft4'] = ''
     
         #lunar phase
@@ -456,16 +458,10 @@ class MakeSvgInstance:
         with open(self.xml_svg, "r") as output_file:
             f = open(self.xml_svg)
             template = Template(f.read()).substitute(td)
-        
-
-        self.chartname = os.path.join(self.output_directory, f'{self.name}{self.type}Chart.svg')
-        
-        with open(self.chartname, "w") as output_file:
-            output_file.write(template)
 
         #return filename
         
-        return print("SVG Generated Correctly")
+        return template
 
     #draw transit ring
     def transitRing(self, r ):
@@ -1435,21 +1431,12 @@ class MakeSvgInstance:
                                                                                                             
                                                                                                                
 
-
-
-
-
-
-
-if __name__ == "__main__":
-    
-    first = kr.Calculator("Jack", 1990, 6, 15, 15, 15, "Roma")
-    second = kr.Calculator("Jane", 1991, 10, 25, 21, 00, "Roma")
-
-    name = MakeSvgInstance(first, chart_type="Composite", second_obj=second)
-    name.output_directory = os.path.expanduser("~")
-    name.makeSVG()
-    print(len(name.aspects_list))
-    kr.print_settings_path()
+class MakeSvgInstanceDiskStore(MakeSvgInstance):
+     def makeSVG(self , printing=None ):
+        template = super().makeSVG(printing)
+        self.chartname = os.path.join(self.output_directory, f'{self.name}{self.type}Chart.svg')
+        
+        with open(self.chartname, "w") as output_file:
+            output_file.write(template)
 
 
