@@ -161,7 +161,7 @@ class MakeSvgInstance:
 
         
         #screen size       
-        self.screen_width = 1104
+        self.screen_width = 811
         self.screen_height = 700
 
 
@@ -284,7 +284,7 @@ class MakeSvgInstance:
             translate = "0"
             # Defoult:
             # viewbox = '0 0 772.2 546.0' #297mm * 2.6 + 210mm * 2.6
-            viewbox = '0 0 1000 546.0'
+            viewbox = '0 0 772 546.0'
         else:
             sizeX = 546.0
             sizeY = 772.2
@@ -1290,10 +1290,10 @@ class MakeSvgInstance:
         pa = int(round(100*self.air/total))
         pw = int(round(100*self.water/total))
         out = '<g transform="translate(-30,79)">\n'
-        out = out + '<text y="0" style="fill:#ff6600; font-size: 10px;">'+self.label['fire']+'  '+str(pf)+'%</text>\n'
-        out = out + '<text y="12" style="fill:#6a2d04; font-size: 10px;">'+self.label['earth']+' '+str(pe)+'%</text>\n'
-        out = out + '<text y="24" style="fill:#6f76d1; font-size: 10px;">'+self.label['air']+'   '+str(pa)+'%</text>\n'
-        out = out + '<text y="36" style="fill:#630e73; font-size: 10px;">'+self.label['water']+' '+str(pw)+'%</text>\n'        
+        out = out + '<text y="0" style="fill:#FF0000; font-size: 10px;">'+self.label['fire']+'  '+str(pf)+'%</text>\n'
+        out = out + '<text y="12" style="fill:#ff6600; font-size: 10px;">'+self.label['earth']+' '+str(pe)+'%</text>\n'
+        out = out + '<text y="24" style="fill:#ffefd6; font-size: 10px;">'+self.label['air']+'   '+str(pa)+'%</text>\n'
+        out = out + '<text y="36" style="fill:#69acf1; font-size: 10px;">'+self.label['water']+' '+str(pw)+'%</text>\n'        
         out = out + '</g>\n'
         return out
         
@@ -1324,7 +1324,7 @@ class MakeSvgInstance:
                 #planet degree                
                 out = out + '<text text-anchor="start" x="19" style="fill:%s; font-size: 10px;">%s</text>' % (self.colors['paper_0'],self.dec2deg(self.planets_degree[i]))
                 #zodiac
-                out = out + '<g transform="translate(60,-8)"><use transform="scale(0.3)" xlink:href="#'+self.zodiac[self.planets_sign[i]]+'" /></g>'                
+                out = out + '<g transform="translate(65,-8)"><use transform="scale(0.3)" xlink:href="#'+self.zodiac[self.planets_sign[i]]+'" /></g>'                
                 #planet retrograde
                 if self.planets_retrograde[i]:
                     out = out + '<g transform="translate(74,-6)"><use transform="scale(.5)" xlink:href="#retrograde" /></g>'                
@@ -1366,7 +1366,7 @@ class MakeSvgInstance:
                     #planet degree                
                     out = out + '<text text-anchor="start" x="19" style="fill:%s; font-size: 10px;">%s</text>' % (self.colors['paper_0'],self.dec2deg(self.t_planets_degree[i]))
                     #zodiac
-                    out = out + '<g transform="translate(60,-8)"><use transform="scale(0.3)" xlink:href="#'+self.zodiac[self.t_planets_sign[i]]+'" /></g>'   ##             
+                    out = out + '<g transform="translate(65,-8)"><use transform="scale(0.3)" xlink:href="#'+self.zodiac[self.t_planets_sign[i]]+'" /></g>'   ##             
                     #planet retrograde
                     if self.t_planets_retrograde[i]:
                         out = out + '<g transform="translate(74,-6)"><use transform="scale(.5)" xlink:href="#retrograde" /></g>'                
@@ -1438,5 +1438,7 @@ class MakeSvgInstanceDiskStore(MakeSvgInstance):
         
         with open(self.chartname, "w") as output_file:
             output_file.write(template)
+
+        return template
 
 
